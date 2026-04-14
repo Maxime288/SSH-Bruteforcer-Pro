@@ -6,6 +6,7 @@ abc123
 admin
 admin123
 root
+client
 toor
 letmein
 welcome
