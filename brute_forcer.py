@@ -13,7 +13,7 @@ import socket
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ──────────────────────────────────────────────────────────────
-# Couleurs ANSI & Style (Cohérence avec network_scanner.py)
+# Couleurs ANSI & Style
 # ──────────────────────────────────────────────────────────────
 class C:
     RESET   = "\033[0m"
@@ -25,14 +25,16 @@ class C:
     CYAN    = "\033[38;5;51m"
     GRAY    = "\033[38;5;244m"
     ORANGE  = "\033[38;5;208m"
+    WHITE   = "\033[38;5;231m" # Ajouté pour corriger l'AttributeError
 
-BANNER = f"""
-{C.ORANGE}  ____             _          {C.YELLOW}  _  {C.RESET}
-{C.ORANGE} |  _ \           | |         {C.YELLOW} | | {C.RESET}
-{C.ORANGE} | |_) |_ __ _   _| |_ ___    {C.YELLOW} | | {C.RESET}
-{C.ORANGE} |  _ <| '__| | | | __/ _ \   {C.YELLOW} |_| {C.RESET}
-{C.ORANGE} | |_) | |  | |_| | ||  __/   {C.YELLOW}  _  {C.RESET}
-{C.ORANGE} |____/|_|   \__,_|\__\___|   {C.YELLOW} |_| {C.RESET}
+# Utilisation de fr""" (raw string) pour éviter les SyntaxWarnings sur les backslashes
+BANNER = fr"""
+{C.ORANGE}  ____                _            {C.YELLOW} _  {C.RESET}
+{C.ORANGE} |  _ \              | |           {C.YELLOW}| | {C.RESET}
+{C.ORANGE} | |_) |_ __ _   _ |_|  ___      {C.YELLOW}| | {C.RESET}
+{C.ORANGE} |  _ <| '__| | | | __ / _ \     {C.YELLOW}|_| {C.RESET}
+{C.ORANGE} | |_) | |  | |_| | ||  __/      {C.YELLOW} _  {C.RESET}
+{C.ORANGE} |____/|_|   \__,_|\__\___|      {C.YELLOW}|_| {C.RESET}
 {C.GRAY}        SSH Authentication Tester v1.0{C.RESET}
 """
 
@@ -46,16 +48,17 @@ class Progress:
     def increment(self):
         with self._lock:
             self.current += 1
-            pct = (self.current / self.total) * 100
-            bar = "█" * int(pct/5) + "░" * (20 - int(pct/5))
-            sys.stderr.write(f"\r  {C.GRAY}{self.label:<15}{C.RESET} {C.ORANGE}[{bar}]{C.RESET} {C.BOLD}{int(pct)}%{C.RESET} ")
-            sys.stderr.flush()
+            if self.total > 0:
+                pct = (self.current / self.total) * 100
+                bar = "█" * int(pct/5) + "░" * (20 - int(pct/5))
+                sys.stderr.write(f"\r  {C.GRAY}{self.label:<15}{C.RESET} {C.ORANGE}[{bar}]{C.RESET} {C.BOLD}{int(pct)}%{C.RESET} ")
+                sys.stderr.flush()
 
 # ──────────────────────────────────────────────────────────────
 # Logique de Bruteforce
 # ──────────────────────────────────────────────────────────────
 
-found_flag = threading.Event() # Pour arrêter tous les threads si on trouve le MDP
+found_flag = threading.Event() 
 
 def ssh_connect(ip, user, password, port=22, timeout=3):
     if found_flag.is_set():
@@ -67,12 +70,12 @@ def ssh_connect(ip, user, password, port=22, timeout=3):
     try:
         client.connect(hostname=ip, port=port, username=user, password=password, 
                        timeout=timeout, allow_agent=False, look_for_keys=False)
-        found_flag.set() # Succès !
+        found_flag.set() 
         return password
     except paramiko.AuthenticationException:
-        return None # Mauvais mot de passe
+        return None 
     except (socket.timeout, paramiko.SSHException):
-        return "ERROR" # Problème réseau
+        return "ERROR" 
     finally:
         client.close()
 
@@ -87,7 +90,6 @@ def main():
 
     print(BANNER)
 
-    # Chargement des mots de passe
     try:
         with open(args.wordlist, 'r', encoding='utf-8', errors='ignore') as f:
             passwords = [line.strip() for line in f if line.strip()]
@@ -112,7 +114,7 @@ def main():
             
             if res and res != "ERROR":
                 valid_password = res
-                break # On a trouvé, on sort de la boucle de récupération
+                break 
 
     print("\n" + "═"*50)
     if valid_password:
