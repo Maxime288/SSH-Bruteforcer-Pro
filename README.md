@@ -1,66 +1,62 @@
-# 🔐 SSH Authentication Tester (Brute Force Lab Tool)
+# 🔐 SSH Bruteforcer Pro
+
+> **Outil de test de robustesse des identifiants SSH**  
+> Un utilitaire performant conçu pour les audits de sécurité et les environnements de laboratoire (CTF).  
+> Développé en Python avec une architecture multi-threadée pour une efficacité maximale.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Cybersecurity-Offensive%20Security-red?style=flat-square">
-  <img src="https://img.shields.io/badge/Python-3.x-blue?style=flat-square&logo=python">
-  <img src="https://img.shields.io/badge/Focus-Access%20Control%20Testing-orange?style=flat-square">
-  <img src="https://img.shields.io/badge/Context-Lab%20Environment-lightgrey?style=flat-square">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Platform-Kali%20Linux-557C94?logo=kalilinux&logoColor=white">
+  <img src="https://img.shields.io/badge/Category-Exploitation-red">
+  <img src="https://img.shields.io/badge/Focus-Cybersecurity-orange">
+</p>
+
+<p align="center">
+  <img src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" width="500">
 </p>
 
 ---
 
-## 🎯 Project Objective
+## 📋 Présentation
 
-This project was developed as part of a **cybersecurity learning initiative** to understand and demonstrate:
+**SSH Bruteforcer Pro** est un outil développé dans un cadre **cybersécurité / pentest** visant à démontrer les risques liés à :
 
-- Weak authentication mechanisms
-- Risks of poor password policies
-- Exposure of SSH services to brute-force attacks
-- Defensive considerations (rate limiting, Fail2Ban, key-based auth)
-
----
-
-## 🧠 Key Skills Demonstrated
-
-- **Offensive Security Basics**
-  - Dictionary attacks on SSH services
-  - Credential testing methodology
-
-- **Python Development**
-  - Multithreading (`ThreadPoolExecutor`)
-  - Network interactions using `paramiko`
-  - CLI tool design with `argparse`
-
-- **System & Network Understanding**
-  - SSH protocol behavior
-  - Authentication workflows
-  - Handling timeouts and connection failures
-
-- **Secure Coding Practices**
-  - Thread-safe execution (`threading.Event`)
-  - Error handling (network / authentication exceptions)
+- 🔓 Mots de passe faibles
+- 🌐 Services SSH exposés
+- ⚠️ Absence de protection contre le brute force
 
 ---
 
-## ⚙️ Technical Overview
+## 🎯 Objectif du projet
 
-The tool performs a **controlled dictionary attack** against an SSH service:
+Ce projet met en avant :
 
-1. Loads a password wordlist
-2. Initiates concurrent authentication attempts
-3. Monitors progress in real-time
-4. Stops execution immediately upon valid credential discovery
-
-### Core Components:
-
-- `paramiko` → SSH connection handling
-- `ThreadPoolExecutor` → Parallel execution
-- `threading.Event` → Global stop condition
-- Custom progress indicator → Runtime visibility
+- Compréhension des attaques par brute force
+- Maîtrise des connexions SSH
+- Optimisation des performances (multi-threading)
+- Vision offensive ET défensive de la cybersécurité
 
 ---
 
-## 🚀 Usage
+## ⚙️ Installation
 
 ```bash
-python3 brute_forcer.py -t <target_ip> -u <username> -w <wordlist>
+pip install paramiko
+git clone https://github.com/Maxime288/SSH-Bruteforcer-Pro.git
+cd SSH-Bruteforcer-Pro
+chmod +x brute_forcer.py
+```
+
+---
+
+## 🚀 Utilisation
+
+```bash
+python3 brute_forcer.py -t <IP_CIBLE> -u <UTILISATEUR> -w <WORDLIST>
+```
+
+---
+
+## ⚠️ Avertissement Légal
+
+Usage strictement autorisé uniquement (lab, CTF, audit).
